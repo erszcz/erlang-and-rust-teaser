@@ -365,9 +365,10 @@ Rust is still in development. YMMV!
 
 [Niko Matsakis][rust-1.0]: "We plan to ship the 1.0 beta around the end of the year."
 
-Minimal, but complete, Erlang example project with a Rust NIF:
+Resources:
 
-- [https://github.com/lavrin/erlang-rust-nif](https://github.com/lavrin/erlang-rust-nif)
+- [this presentation on GitHub][self]
+- [a minimal, but complete, Erlang example project with a Rust NIF][rust-nif]
 
 References:
 
@@ -379,6 +380,8 @@ References:
 - [Rust for embedded systems][embedded-rust]
 - [Operating System Development in Rust](https://github.com/rust-lang/rust/wiki/Operating-system-development)
 
+[self]: https://github.com/lavrin/erlang-and-rust-teaser/
+[rust-nif]: https://github.com/lavrin/erlang-rust-nif
 [rust-lang]: http://www.rust-lang.org/
 [rust-1.0]: http://blog.rust-lang.org/2014/09/15/Rust-1.0.html
 [native-libs]: http://lucumr.pocoo.org/2013/8/18/beautiful-native-libraries/
