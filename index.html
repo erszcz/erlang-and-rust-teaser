@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=1024, user-scalable=no">
+
+    <title>untitled</title>
+	
+	<!-- Required stylesheet -->
+	<link rel="stylesheet" href="imakewebthings-deck.js-e42bd0c/core/deck.core.css">
+	
+	<!-- Extension CSS files go here. Remove or add as needed. -->
+	<link rel="stylesheet" href="imakewebthings-deck.js-e42bd0c/extensions/goto/deck.goto.css">
+	<link rel="stylesheet" href="imakewebthings-deck.js-e42bd0c/extensions/menu/deck.menu.css">
+	<link rel="stylesheet" href="imakewebthings-deck.js-e42bd0c/extensions/navigation/deck.navigation.css">
+	<link rel="stylesheet" href="imakewebthings-deck.js-e42bd0c/extensions/status/deck.status.css">
+	<link rel="stylesheet" href="imakewebthings-deck.js-e42bd0c/extensions/hash/deck.hash.css">
+	<link rel="stylesheet" href="imakewebthings-deck.js-e42bd0c/extensions/scale/deck.scale.css">
+
+	<!-- Style theme. More available in /themes/style/ or create your own. -->
+	<link rel="stylesheet" href="imakewebthings-deck.js-e42bd0c/themes/style/swiss.css">
+	
+	<!-- Transition theme. More available in /themes/transition/ or create your own. -->
+	<link rel="stylesheet" href="imakewebthings-deck.js-e42bd0c/themes/transition/horizontal-slide.css">
+	
+	<!-- Required Modernizr file -->
+	<script src="imakewebthings-deck.js-e42bd0c/modernizr.custom.js"></script>
+</head>
+<body class="deck-container">
+
+<!-- Begin slides. Just make elements with a class of slide. -->
+
+<div class="slide" id="1"><h1>Rust Teaser</h1>
+</div><div class="slide" id="2"><h2>Who am I?</h2>
+<ul>
+<li>Radek Szymczyszyn</li>
+<li>MongooseIM / ejabberd / XMPP engineer from Erlang Solutions in Kraków</li>
+<li><a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#114;&#97;&#100;&#111;&#115;&#108;&#97;&#119;&#46;&#115;&#122;&#121;&#109;&#99;&#122;&#121;&#115;&#122;&#121;&#110;&#64;&#101;&#114;&#108;&#97;&#110;&#103;&#45;&#115;&#111;&#108;&#117;&#116;&#105;&#111;&#110;&#115;&#46;&#99;&#111;&#109;">&#114;&#97;&#100;&#111;&#115;&#108;&#97;&#119;&#46;&#115;&#122;&#121;&#109;&#99;&#122;&#121;&#115;&#122;&#121;&#110;&#64;&#101;&#114;&#108;&#97;&#110;&#103;&#45;&#115;&#111;&#108;&#117;&#116;&#105;&#111;&#110;&#115;&#46;&#99;&#111;&#109;</a></li>
+<li><a href="https://github.com/lavrin/">https://github.com/lavrin/</a></li>
+</ul>
+</div><div class="slide" id="3"><h2>Intro</h2>
+<p>I won't introduce the whole language, because I simply can't in 15 minutes.
+Besides, there's a great guide on <a href="http://www.rust-lang.org/">rust-lang.org</a> which will do it better than I.</p>
+<p>Instead, I'll show you one aspect of what Rust might be good for and why.
+What is it? The stuff we write in C now - system-level software and shared libraries.
+Why? Because it allows you to touch the metal if you have to,
+but otherwise strives to be as safe as possible.</p>
+</div><div class="slide" id="4"><h2>Rust features</h2>
+<ul>
+<li>algebraic data types (Erlang tagged types might work as substitutes)</li>
+<li>pattern matching</li>
+<li>closures</li>
+<li>type inference (Erlang is dynamically typed -- no need for inference)</li>
+<li>zero-cost abstractions (C++ anyone? iterators are just pointers,
+  destructors instead of garbage collection)</li>
+<li>guaranteed memory safety (linear types)</li>
+<li>concurrency without data races (tasks powered by OS threads <strong>or</strong>
+  lightweight processes)</li>
+<li>minimal runtime (just like C)</li>
+<li>efficient C bindings</li>
+</ul>
+</div><div class="slide" id="5"><h2>Rust features</h2>
+<ul>
+<li>algebraic data types (Erlang tagged types might work as substitutes)</li>
+<li>pattern matching</li>
+<li>closures</li>
+<li>type inference (Erlang is dynamically typed -- no need for inference)</li>
+<li><span style="color: #c00;">zero-cost abstractions (C++ anyone? iterators are just pointers,
+  destructors instead of garbage collection)</span></li>
+<li><span style="color: #c00;">guaranteed memory safety (linear types)</span></li>
+<li>concurrency without data races (tasks powered by OS threads <strong>or</strong>
+  lightweight processes)</li>
+<li><span style="color: #c00;">minimal runtime (just like C)</span></li>
+<li><span style="color: #c00;">efficient C bindings</span></li>
+</ul>
+</div><div class="slide" id="6"><h2>Algebraic data types &amp; pattern matching</h2>
+<pre><code>enum OptionalInt {
+    Value(int),
+    Missing,
+}
+
+fn main() {
+    let x = Value(5);
+    let y = Missing;
+
+    match x {
+        Value(n) =&gt; println!("x is {:d}", n),
+        Missing  =&gt; println!("x is missing!"),
+    }
+
+    match y {
+        Value(n) =&gt; println!("y is {:d}", n),
+        _        =&gt; println!("y is missing!"),
+    }
+}
+</code></pre>
+</div><div class="slide" id="7"><h2>No generics (think: Google Go)</h2>
+<pre><code>enum OptionalInt {
+    Value(int),
+    Missing,
+}
+
+enum OptionalFloat64 {
+    Valuef64(f64),
+    Missingf64
+}
+
+fn main() {
+    let x = Value(5);
+    let xf64 = Valuef64(5.0f64);
+
+    match x {
+        Value(n) =&gt; println!("x is {:d}", n),
+        Missing  =&gt; println!("x is missing!"),
+    }
+
+    match xf64 {
+        Valuef64(n) =&gt; println!("xf64 is {:.1f}", n),
+        Missingf64  =&gt; println!("xf64 is missing!"),
+    }
+}
+</code></pre>
+</div><div class="slide" id="8"><h2>Generics</h2>
+<pre><code>enum Option&lt;T&gt; {
+    Some(T),
+    None
+}
+
+fn main() {
+    // When dealing with generics we need to give
+    // the compiler some hints about types in use.
+    let x = Some(5i);
+    let y : Option&lt;int&gt; = None;
+
+    match x {
+        Some(n) =&gt; println!("x is {:d}", n),
+        None    =&gt; println!("x is missing!")
+    }
+
+    match y {
+        Some(n) =&gt; println!("y is {:d}", n),
+        _       =&gt; println!("y is missing!")
+    }
+}
+</code></pre>
+</div><div class="slide" id="9"><h2>Generics and Traits</h2>
+<pre><code>struct Circle { x: f64, y: f64, radius: f64 }
+struct Square { a: f64 }
+
+trait HasArea {
+    fn area(&amp;self) -&gt; f64;
+}
+
+impl HasArea for Circle {
+    fn area(&amp;self) -&gt; f64 {
+        std::f64::consts::PI * (self.radius * self.radius)
+    }
+}
+
+impl HasArea for Square {
+    fn area(&amp;self) -&gt; f64 { self.a * self.a }
+}
+
+// Won't compile!
+fn area&lt;S&gt;(shape: &amp;S) -&gt; f64 { shape.area() }
+
+fn area&lt;S: HasArea&gt;(shape: &amp;S) -&gt; f64 { shape.area() }
+
+fn main() {
+    let c = Circle{ x: 2.0, y: 2.0, radius: 4.0 };
+    let s = Square{ a: 2.0 };
+    println!("circle area: {:f}", area(&amp;c));
+    println!("square area: {:f}", area(&amp;s));
+}
+</code></pre>
+</div><div class="slide" id="10"><h2>Traits</h2>
+<pre><code>struct Circle { x: f64, y: f64, radius: f64 }
+struct Square { a: f64 }
+struct Line { a: f64, b: f64 }
+
+trait HasArea {
+    fn area(&amp;self) -&gt; f64;
+}
+
+impl HasArea for Circle {
+    fn area(&amp;self) -&gt; f64 {
+        std::f64::consts::PI * (self.radius * self.radius)
+    }
+}
+
+impl HasArea for Square {
+    fn area(&amp;self) -&gt; f64 { self.a * self.a }
+}
+
+fn slope(l: &amp;Line) -&gt; f64 { l.a }
+
+fn area&lt;S: HasArea&gt;(shape: &amp;S) -&gt; f64 {
+    shape.area()
+}
+
+fn main() {
+    let c = Circle{ x: 2.0, y: 2.0, radius: 4.0 };
+    let s = Square{ a: 2.0 };
+    let l = Line{ a: 1.3, b: 2.0 };
+    println!("circle area: {:f}", area(&amp;c));
+    println!("square area: {:f}", area(&amp;s));
+    // Won't compile!
+    // error: failed to find an implementation of trait HasArea for Line
+    //println!("line area: {:.2f}", area(&amp;l));
+}
+</code></pre>
+</div><div class="slide" id="11"><h2>What's wrong with this code?</h2>
+<pre><code>// Return a vector of tokens found in the given string.
+// Each token is a (token_begin, token_end) pair.
+vector&lt;pair&lt;const char *,const char *&gt;&gt;
+tokenize_string(const string &amp;text);
+
+int main()
+{
+    vector&lt;pair&lt;const char *, const char *&gt;&gt; v;
+    {
+        string s = "ala ma kota, a kot ma ale";
+        v = tokenize_string(s);
+    }
+    for (auto i = begin(v); i &lt; end(v); i++) {
+        cout &lt;&lt; string(i-&gt;first, i-&gt;second - i-&gt;first) &lt;&lt; "\n";
+    }
+    return 0;
+}
+</code></pre>
+<p>Idea stolen from <a href="http://www.randomhacks.net/2014/09/19/rust-lifetimes-reckless-cxx/">http://www.randomhacks.net/2014/09/19/rust-lifetimes-reckless-cxx/</a></p>
+<!--
+
+Is this a contrived example?
+Of course it is!
+However, don't forget what John Carmack,
+the lead programmer of Wolfenstein, Doom, and Quake series,
+once said in an interview:
+
+    If something is allowed by the language syntax,
+    sooner or later it will end up in your codebase.
+
+-->
+
+</div><div class="slide" id="12"><h2>Let's ask Valgrind</h2>
+<!-- -->
+
+</div><div class="slide" id="13"><h2>Rust to the rescue: Lifetimes</h2>
+<pre><code>#[deriving(Show, PartialEq)]
+enum Token&lt;'a&gt; {
+    Word(&amp;'a str),
+    Other(&amp;'a str)
+}
+
+fn tokenize_string3&lt;'a&gt;(text: &amp;'a str) -&gt; Vec&lt;Token&lt;'a&gt;&gt; {
+    // ...
+}
+
+#[test]
+fn test_parse_safe() {
+    assert_eq!(vec![Word("The"), Other(" "), Word("cat")],
+               tokenize_string3("The cat"));
+}
+
+// Won't compile!
+// lifetimes.rs:39:26: 39:30 error: `text` does not live long enough
+// lifetimes.rs:39         tokenize_string3(text.as_slice())
+//#[test]
+//fn test_parse_unsafe() {
+//    let v = {
+//        let text = "The cat".to_string();
+//        tokenize_string3(text.as_slice())
+//    };
+//    assert_eq!(vec![Word("The"), Other(" "), Word("cat")], v);
+//}
+</code></pre>
+</div><div class="slide" id="14"><h2>Erlang NIFs in Rust (1)</h2>
+<p><strong>Bindgen</strong> generates boilerplate for interfacing with C from Rust based on
+existing C header files.
+The only problem is it <strong>doesn't understand macros.</strong></p>
+<p>Writing a NIF shared library in Rust boils down to expanding the <code>ERL_NIF_INIT</code> macro:</p>
+<pre><code>// file: er.c
+
+ErlNifFunc funcs[] =
+{
+    {"native_add", 2, native_add}
+};
+
+ERL_NIF_INIT(er, funcs, NULL, NULL, NULL, NULL);
+</code></pre>
+</div><div class="slide" id="15"><h2>Erlang NIFs in Rust (2)</h2>
+<p>Which means writing the following in Rust instead of C:</p>
+<pre><code>// file: er.E (macro expanded er.c)
+
+ErlNifFunc funcs[] = {
+    {"native_add", 2, native_add}
+};
+
+ErlNifEntry* nif_init(void) {
+    static ErlNifEntry entry = {
+        2,                              // int major;
+        6,                              // int minor;
+        "er",                           // const char* name;
+        sizeof(funcs) / sizeof(*funcs), // int num_of_funcs;
+        funcs,                          // ErlNifFunc* funcs;
+        ((void *)0),                    // int  (*load)   (ErlNifEnv*, /* skipped args */);
+        ((void *)0),                    // int  (*reload) (ErlNifEnv*, /* skipped args */);
+        ((void *)0),                    // int  (*upgrade)(ErlNifEnv*, /* skipped args */);
+        ((void *)0),                    // void (*unload) (ErlNifEnv*, /* skipped args */);
+        "beam.vanilla"                  // const char* vm_variant;
+    };
+    return &amp;entry;
+}
+</code></pre>
+<p>Easy, right? Wrong!
+It's not possible to declare a static C-style string (<code>"er"</code>, <code>"beam.vanilla"</code>) from Rust! But there is hope...</p>
+</div><div class="slide" id="16"><h2>Erlang NIFs in Rust (3)</h2>
+<pre><code>static mut funcs: [c::ErlNifFunc, ..1] = [
+    c::ErlNifFunc { name  : 0 as *const c_char,
+                    arity : 2,
+                    fptr  : Some(native_add) }
+];
+
+static mut nif_entry: c::ErlNifEntry = c::ErlNifEntry {
+    major           : 2,
+    minor           : 6,
+    name            : 0 as *const c_char,
+    num_of_funcs    : 1,
+    funcs           : 0 as *mut c::ErlNifFunc,
+    load            : None,
+    reload          : None,
+    upgrade         : None,
+    unload          : None,
+    vm_variant      : 0 as *const c_char
+};
+
+#[no_mangle]
+pub extern "C" fn nif_init() -&gt; *mut c::ErlNifEntry
+{
+    unsafe {
+        funcs[0].name = "native_add".to_c_str().unwrap();
+        nif_entry.name = "er".to_c_str().unwrap();
+        nif_entry.num_of_funcs = funcs.len() as i32;
+        nif_entry.funcs = funcs.as_mut_ptr();
+        nif_entry.vm_variant = "beam.vanilla".to_c_str().unwrap();
+        &amp;mut nif_entry
+    }
+}
+</code></pre>
+</div><div class="slide" id="17"><h2>Rust for embedded systems</h2>
+<p>Rust runs on ARM Cortex-M0 (the smallest ARM available). A trivial binary uses 1K flash and 100 bytes RAM.</p>
+<p>In general, it runs on 32-bit CPUs.
+There're some google hits about running on Arduino, but pay attention that
+it's Arduino Due, not the original one. Due is actually an ARM chip in disguise.</p>
+</div><div class="slide" id="18"><h2>Outro / References</h2>
+<p>Rust is still in development. YMMV!</p>
+<p><a href="http://blog.rust-lang.org/2014/09/15/Rust-1.0.html">Niko Matsakis</a>: "We plan to ship the 1.0 beta around the end of the year."</p>
+<p>Minimal, but complete, Erlang project with a Rust NIF:</p>
+<ul>
+<li><a href="https://github.com/lavrin/erlang-rust-nif">https://github.com/lavrin/erlang-rust-nif</a></li>
+</ul>
+<p>References:</p>
+<ul>
+<li><a href="http://www.rust-lang.org/">rust-lang.org</a></li>
+<li><a href="http://lucumr.pocoo.org/2013/8/18/beautiful-native-libraries/">Beautiful Native Libraries</a></li>
+<li><a href="http://www.randomhacks.net/2014/09/19/rust-lifetimes-reckless-cxx/">Reckless C++</a></li>
+<li><a href="https://github.com/crabtw/rust-bindgen/">Rust Bindgen</a></li>
+<li><a href="http://blog.rust-lang.org/2014/09/15/Rust-1.0.html">Road to Rust 1.0</a></li>
+<li><a href="http://bharr.is/2013/11/13/rust-for-embedded-systems/">Rust for embedded systems</a></li>
+<li><a href="https://github.com/rust-lang/rust/wiki/Operating-system-development">Operating System Development in Rust</a></li>
+</ul>
+</div>
+
+<!-- End slides. -->
+
+
+<!-- Begin extension snippets. Add or remove as needed. -->
+
+<!-- deck.navigation snippet -->
+<a href="#" class="deck-prev-link" title="Previous">&#8592;</a>
+<a href="#" class="deck-next-link" title="Next">&#8594;</a>
+
+<!-- deck.status snippet -->
+<p class="deck-status">
+	<span class="deck-status-current"></span>
+	/
+	<span class="deck-status-total"></span>
+</p>
+
+<!-- deck.goto snippet -->
+<form action="." method="get" class="goto-form">
+	<label for="goto-slide">Go to slide:</label>
+	<input type="text" name="slidenum" id="goto-slide" list="goto-datalist">
+	<datalist id="goto-datalist"></datalist>
+	<input type="submit" value="Go">
+</form>
+
+<!-- deck.hash snippet -->
+<a href="." title="Permalink to this slide" class="deck-permalink">#</a>
+
+<!-- End extension snippets. -->
+
+
+<!-- Required JS files. -->
+<script src="imakewebthings-deck.js-e42bd0c/jquery-1.7.2.min.js"></script>
+<script src="imakewebthings-deck.js-e42bd0c/core/deck.core.js"></script>
+
+<!-- Extension JS files. Add or remove as needed. -->
+<script src="imakewebthings-deck.js-e42bd0c/core/deck.core.js"></script>
+<script src="imakewebthings-deck.js-e42bd0c/extensions/hash/deck.hash.js"></script>
+<script src="imakewebthings-deck.js-e42bd0c/extensions/menu/deck.menu.js"></script>
+<script src="imakewebthings-deck.js-e42bd0c/extensions/goto/deck.goto.js"></script>
+<script src="imakewebthings-deck.js-e42bd0c/extensions/status/deck.status.js"></script>
+<script src="imakewebthings-deck.js-e42bd0c/extensions/navigation/deck.navigation.js"></script>
+<script src="imakewebthings-deck.js-e42bd0c/extensions/scale/deck.scale.js"></script>
+
+<!-- Initialize the deck. You can put this in an external file if desired. -->
+<script>
+	$(function() {
+		$.deck('.slide');
+	});
+</script>
+</body>
+</html>
