@@ -302,10 +302,10 @@ Which means writing the following in Rust instead of C:
         "er",           // const char* name;
         sizeof(funcs) / sizeof(*funcs),  // int num_of_funcs;
         funcs,          // ErlNifFunc* funcs;
-        ((void *)0),    // int  (*load)   (ErlNifEnv*, /* skipped args */);
-        ((void *)0),    // int  (*reload) (ErlNifEnv*, /* skipped args */);
-        ((void *)0),    // int  (*upgrade)(ErlNifEnv*, /* skipped args */);
-        ((void *)0),    // void (*unload) (ErlNifEnv*, /* skipped args */);
+        ((void *)0),    // int  (*load)   (ErlNifEnv*, /* skipped */);
+        ((void *)0),    // int  (*reload) (ErlNifEnv*, /* skipped */);
+        ((void *)0),    // int  (*upgrade)(ErlNifEnv*, /* skipped */);
+        ((void *)0),    // void (*unload) (ErlNifEnv*, /* skipped */);
         "beam.vanilla"  // const char* vm_variant;
       };
       return &entry;

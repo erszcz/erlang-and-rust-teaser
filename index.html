@@ -298,19 +298,19 @@ ErlNifFunc funcs[] = {
 };
 
 ErlNifEntry* nif_init(void) {
-    static ErlNifEntry entry = {
-        2,                              // int major;
-        6,                              // int minor;
-        "er",                           // const char* name;
-        sizeof(funcs) / sizeof(*funcs), // int num_of_funcs;
-        funcs,                          // ErlNifFunc* funcs;
-        ((void *)0),                    // int  (*load)   (ErlNifEnv*, /* skipped args */);
-        ((void *)0),                    // int  (*reload) (ErlNifEnv*, /* skipped args */);
-        ((void *)0),                    // int  (*upgrade)(ErlNifEnv*, /* skipped args */);
-        ((void *)0),                    // void (*unload) (ErlNifEnv*, /* skipped args */);
-        "beam.vanilla"                  // const char* vm_variant;
-    };
-    return &amp;entry;
+  static ErlNifEntry entry = {
+    2,              // int major;
+    6,              // int minor;
+    "er",           // const char* name;
+    sizeof(funcs) / sizeof(*funcs),  // int num_of_funcs;
+    funcs,          // ErlNifFunc* funcs;
+    ((void *)0),    // int  (*load)   (ErlNifEnv*, /* skipped args */);
+    ((void *)0),    // int  (*reload) (ErlNifEnv*, /* skipped args */);
+    ((void *)0),    // int  (*upgrade)(ErlNifEnv*, /* skipped args */);
+    ((void *)0),    // void (*unload) (ErlNifEnv*, /* skipped args */);
+    "beam.vanilla"  // const char* vm_variant;
+  };
+  return &amp;entry;
 }
 </code></pre>
 <p>Easy, right? Wrong!
@@ -356,7 +356,7 @@ it's Arduino Due, not the original one. Due is actually an ARM chip in disguise.
 </div><div class="slide" id="18"><h2>Outro / References</h2>
 <p>Rust is still in development. YMMV!</p>
 <p><a href="http://blog.rust-lang.org/2014/09/15/Rust-1.0.html">Niko Matsakis</a>: "We plan to ship the 1.0 beta around the end of the year."</p>
-<p>Minimal, but complete, Erlang project with a Rust NIF:</p>
+<p>Minimal, but complete, Erlang example project with a Rust NIF:</p>
 <ul>
 <li><a href="https://github.com/lavrin/erlang-rust-nif">https://github.com/lavrin/erlang-rust-nif</a></li>
 </ul>
