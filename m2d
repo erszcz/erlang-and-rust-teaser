@@ -1,0 +1,51 @@
+#!/usr/bin/env python
+
+import markdown
+import sys
+import jinja2
+import codecs
+from optparse import OptionParser
+import re
+import mdx_slider
+
+parser = OptionParser()
+parser.add_option("-p", "--plain", action="store_true", dest="plain",
+                  help="create downloadable HTML file instead of deck.js slides")
+(options, args) = parser.parse_args()
+
+# Check if there are enough arguments
+if len(sys.argv) < 3:
+    print "Usage: m2d [-p] <input.md> <template.html> [<title>]"
+    sys.exit()
+# Set title if supplied
+elif len(sys.argv) > 3:
+    title = sys.argv[3].decode('utf-8')
+else:
+    title = 'untitled'
+
+if sys.argv[1] == '-':
+    content = sys.stdin.read().decode("utf-8")
+else:
+    content = codecs.open(sys.argv[1], mode="r", encoding="utf-8").read()
+
+# Check if plain HTML should be generated
+if options.plain:
+    # Now strip all tildes from lineends
+    content = re.sub(re.compile("~\s*$", flags=re.MULTILINE),
+                     "", content)
+    # Do NOT activate the slider extension
+    html = markdown.markdown(content)
+else:
+    # Generate markdown from input file
+    html = markdown.markdown(content,
+                         # Use extensions to create proper slides
+                         extensions=['slider'])
+
+# Open Template supplied as argument
+t = jinja2.Template(open(sys.argv[2]).read())
+# Render template with content and title
+text = t.render(**{ 'content' : html,
+                    'title' : title })
+
+# Print to STDOUT, use file redirection to save actual HTML file
+print text.encode('utf-8')
