@@ -5,7 +5,7 @@
 - Radek Szymczyszyn
 - MongooseIM / ejabberd / XMPP engineer from Erlang Solutions in Kraków
 - <radoslaw.szymczyszyn@erlang-solutions.com>
-- [https://github.com/lavrin/](https://github.com/lavrin/)
+- [https://github.com/erszcz/](https://github.com/erszcz/)
 
 
 ## Intro
